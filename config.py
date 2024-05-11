@@ -1,4 +1,6 @@
 import os
+import PyPDF2
+
 # Guarda en una lista las rutas de los archivos 
 def laod_file(ruta):
     lista = os.listdir(ruta)
@@ -8,27 +10,50 @@ def laod_file(ruta):
         if os.path.isfile(contenido):
             archivos.append(contenido)
         elif os.path.isdir(contenido):
-            #Si hay una carpeta revisa el contenido y lo añade a la lista
+            #Si hay una carpeta agrega los archivos de la carpeta a la lista
             archivos += laod_file(contenido)
     return archivos
 
+def leer_txt(item):
+    with open(item,'r') as archivo:
+        text = archivo.read()
+    return text
+import PyPDF2
+
+def leer_pdf(ruta):
+    with open(ruta, 'rb') as archivo_pdf:  # Abre el archivo en modo binario ('rb')
+        lector = PyPDF2.PdfReader(archivo_pdf)
+        texto = ""
+        for pagina in lector.pages:
+            texto += pagina.extract_text()
+    return texto
+
 def sheatch_text(text,lista):
-    #Recore la lista con la direcion de los archivos
     for item in lista:
-        print("------------------------------------------------------------------------------------")
-        with open(item,'r') as archivo:
-            print(archivo.name)
+        print("------------------------------------------------------------------------------------")        
+        print(item)
+        if item.endswith(".pdf"):
+            text = leer_pdf(item)
+            #################################
+            lineas = text.split('\n')
+            for linea in lineas:
+                print(linea)
+            #################################
+        elif item.endswith(".txt"):
+            text = leer_txt(item)
+            #################################
             cont=0
-            #document_bd() 
-            for linea in archivo:
+            for linea in text:
                 if text in linea:
+                    
                     cont+=1
                     print(linea.index(text))
                     print(linea.strip())
+
             if cont == 0:
                 print("document not found")
-        archivo.close()
+            #################################
+        #print(text)
 
-def document_bd(document):
-    #Implemententar una base de datos con un documento
-    return
+#texto=texto.lower()
+#texto=texto.split(' ')
