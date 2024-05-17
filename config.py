@@ -33,6 +33,7 @@ def sheatch_text(text,lista):
     for item in lista:
         print("-------------------------------------------------------------------------------------------------------")        
         print(item)
+        print('\n')
         if item.endswith(".pdf"):
             text = leer_pdf(item)
             token = tokenizacion(text)
