@@ -2,7 +2,7 @@ from TF_IDF import *
 from triee import *
 import os
 import PyPDF2
-
+from prueba2 import *
 # Guarda en una lista las rutas de los archivos 
 def load_file(ruta):
     lista = os.listdir(ruta)
@@ -17,10 +17,9 @@ def load_file(ruta):
     return archivos
 
 def leer_txt(item):
-    with open(item,'r') as archivo:
+    with open(item,'r',encoding='utf-8') as archivo:
         text = archivo.read()
     return text
-import PyPDF2
 
 def leer_pdf(ruta):
     with open(ruta, 'rb') as archivo_pdf:  # Abre el archivo en modo binario ('rb')
