@@ -1,5 +1,17 @@
 import re
 from config import *
+from trie_para_iftdf import *
+
+def convert_to_trie(archivos):
+    trie = Trie()
+    for item in archivos:
+        item=clean_text(item) #limpia el texto
+        words = item.split() # Divide el texto en palabras
+        for word in words:
+            insert(trie, word)
+    return trie
+
+
 def clean_text(text):
   texto=leer_txt(text)
   # Pasar el texto a minúsculas

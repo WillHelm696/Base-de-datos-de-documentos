@@ -3,6 +3,7 @@ from triee import *
 import os
 import PyPDF2
 from prueba2 import *
+
 # Guarda en una lista las rutas de los archivos 
 def load_file(ruta):
     lista = os.listdir(ruta)

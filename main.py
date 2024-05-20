@@ -18,6 +18,11 @@ print(token)
 
 #Creasion de Base de datos con los documentos
 #bd_document=bd_documents(archivos)
-print(clean_text(archivos[0]))
+
 #shearch_text(token,bd_document)
 
+#print(clean_text(archivos[0]))
+
+nuevo_trie=convert_to_trie(archivos)
+print(nuevo_trie.root.key)
+print(get_all_words(nuevo_trie))
