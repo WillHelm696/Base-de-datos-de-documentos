@@ -28,19 +28,19 @@ def shearch_text(texto):
 #print(get_all_words(nuevo_trie))
 
 def operaciones(args):
-    if args.operation == '-create':
+    if args.operation == 'create':
         create_bd(args.argumento)
         print("crear base de datos")
-    if args.operation == '-shearch':
+    if args.operation == 'search':
         shearch_text(args.argumento)
 
 def main():
-    parser=argparse.ArgumentParser(description='Crear nuevo base de datos.')
-    parser.add_argument('operation',action='store_true',help='-create | -shearch')
-    parser.add_argument('argumento',help='<loca_path> | <text>')
+    parser = argparse.ArgumentParser(description='Crear o buscar en la base de datos.')
+    parser.add_argument('operation', choices=['create', 'search'], help='Operación a realizar: create | search')
+    parser.add_argument('argumento', help='Ruta a la carpeta de documentos o texto a buscar')
 
-    args=parser.parse_args()
-    sys.stdout.write(str(operaciones(args)))
+    args = parser.parse_args()
+    operaciones(args)
 
-if __name__=='__main__':
+if __name__ == '__main__':
     main()
