@@ -1,6 +1,7 @@
 from TF_IDF import *
 from triee import *
 import os
+import pickle
 import PyPDF2
 #from prueba2 import *
 
@@ -16,6 +17,19 @@ def load_file(ruta):
             #Si hay una carpeta agrega los archivos de la carpeta a la lista
             archivos += load_file(contenido)
     return archivos
+
+#Funcion que guarda el document_bd en un pickle
+def save_file(documents_bd,save_path='database/document_bd.pkl'):
+    os.makedirs(os.path.dirname(save_path),exit_ok=True)
+    with open(save_path,'wb') as f:
+        pickle.dump(documents_bd,f)
+    print("document data-base created successfully")
+
+def load_bd(file_path='database/document_bd.pkl'):
+    #Cargar la base de datos desde el archivo picke
+    with open(file_path,'rb') as f:
+        documents_bd = pickle.load(f)
+    return documents_bd
 
 def leer_txt(item):
     with open(item,'r',encoding='utf-8') as archivo:
@@ -94,6 +108,7 @@ def bd_documents(lista):
         documents.append(text)
     #Calcula para documento el tf-ydf de cada palabra y lo guardacomo tupla
     bd_tf_idf = Tf_Idf(documents)
+
     """
     #Base de datos del la direcion y el trie de cada archivo
     document_bd= {}
@@ -105,7 +120,7 @@ def bd_documents(lista):
         # Guarda como una tupla la direcion del archivo y el trie del archivo
         document_bd[index]=(trie_doc,lista[index])
 
-    #Funcion que guarda el document_bd en un pickle
-
+    return bd_tf_idf
     """
-    
+
+
