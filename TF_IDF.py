@@ -1,10 +1,6 @@
 import re
 import math
-"""
-documents = ['the universe has very many stars',
-             'the galaxi contains many stars',
-             'the cold brezeze of winter made it very cold outside']
-"""
+from limpieza import *
 
     #----Calculate term frecuency---
     #Primero: tokenizar palabras
@@ -31,7 +27,8 @@ def Tf_Idf(documents):
     for i in range(len(documents)):
         listOfNoDuplicates = []
         for wordFreq in dictOfWords[i]:
-            listOfNoDuplicates.append(wordFreq)
+            if not wordFreq in listOfNoDuplicates:
+                listOfNoDuplicates.append(wordFreq)
         termFrequency[i] = listOfNoDuplicates
 
     # Tercero: Frecuencia de términos Normalizada
@@ -47,7 +44,7 @@ def Tf_Idf(documents):
             listOfNormalized.append((wordFreq[0], normalizedFreq))
         normalizedTermFrequency[i] = listOfNormalized
 
-    # ---- Calcular IDF ----
+    # ---- Calcular TF ----
     # Cuarto: Juntar todas las oraciones y tokenizar las palabras
     allDocuments = ''
     for sentence in documents:
@@ -68,9 +65,9 @@ def Tf_Idf(documents):
         for sentence in documents:
             if voc in sentence:
                 count += 1
-        dictOfNumberOfDocumentsWithTermInside[index] = (voc, count)
+        dictOfNumberOfDocumentsWithTermInside[index] = (voc,count)
 
-    # Calcular IDF
+    # ---- Calcular IDF ----
     dictOFIDFNoDuplicates = {}
     for i in range(len(normalizedTermFrequency)):
         listOfIDFCalcs = []
@@ -93,20 +90,11 @@ def Tf_Idf(documents):
 
     return dictOFTF_IDF
 
-
 """
-    from nltk.text import TextCollection
+documents = ['the universe has very many stars',
+             'the galaxi contains many stars',
+             'the cold brezeze of winter made it very cold outside']
 
-    mytexts = TextCollection(['the the universe has very many stars','the galaxy contains many stars','the cold breeze of winter made it very cold outside'])
 
-    print("NLTK tf_idf")
-    print(mytexts.tf_idf('very','the the universe has very many stars'))
-
-    def test_tf(term, text):
-        newText = text.split(' ')
-        print(text.count(term))
-        print(len(newText))
-
-    #test_tf('universe','the the universe has very many stars')
-
+print(Tf_Idf(documents))
 """

@@ -5,10 +5,12 @@ class TrieNode:
     parent = None
     children = None   
     key = None
+    tf_idf=None
     isEndOfWord = False
 ####################################################################################
 
-def insert(T, string):
+def insert(T, tupla):
+    (string,tfidf)=(tupla[0],tupla[1])
     if T.root is None:
         newNode = TrieNode()
         #print("Insertado",string[0])
@@ -17,14 +19,16 @@ def insert(T, string):
         T.root = newNode
         if len(string) == 1:
             T.root.isEndOfWord = True
-    add_trie(T.root, string)
+            T.root.tf_idf=tfidf
+    add_trie(T.root, string,tfidf)
 
-def add_trie(current,string):
+def add_trie(current,string,tfidf):
     if current is not None:
         if current.key == string[0]:
             string=string[1:]
             if not string:
                 current.isEndOfWord = True
+                current.tf_idf = tfidf
                 return
             elif current.children[0] != None:
                 #print("Hijo de",current.key)
@@ -38,6 +42,7 @@ def add_trie(current,string):
                 current.children[0] = newNode
                 if len(string) == 1:
                     newNode.isEndOfWord = True
+                    newNode.tf_idf = tfidf
             return add_trie(current.children[0],string)
         if current.children[1] != None:
             #print(current.key,"Hermano de",current.children[1].key)
@@ -50,9 +55,32 @@ def add_trie(current,string):
             newNode.children = [None,None]
             current.children[1] = newNode
             if len(string) == 1:
+                newNode.tf_idf = tfidf
                 newNode.isEndOfWord = True
         #print(current.key,"Hermano de",current.children[1].key)
-        return add_trie(current.children[1],string)
+        return add_trie(current.children[1],string,tfidf)
+####################################################################################
+def search_tf_ifd(current,string):
+    if current is None :
+        if len(string) > 0:
+            return False
+        return True
+    elif len(string) == 0:
+        if current.isEndOfWord:
+            return True
+        return False
+    
+    if current.key == string[0]:
+        #print("Buscar hijo",current.key)
+        return find(current.children[0],string[1:])
+    else:
+        #print("Buscar hermano",current.key)
+        return find(current.children[1],string)
+
+def search(T,string):
+    if T.root != None:
+        return find(T.root,string)
+    return False
 ####################################################################################
 def find(current,string):
     if current is None :
