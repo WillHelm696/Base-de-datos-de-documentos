@@ -2,6 +2,12 @@ import re
 from config import *
 from trie_para_iftdf import *
 
+
+def leer_txt(item):
+    with open(item,'r',encoding='utf-8') as archivo:
+        text = archivo.read()
+    return text
+
 def convert_to_trie(archivos):
     trie = Trie()
     for item in archivos:

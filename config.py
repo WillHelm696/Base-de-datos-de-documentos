@@ -2,7 +2,8 @@ from TF_IDF import *
 from triee import *
 import os
 import pickle
-#import PyPDF2
+import re
+import PyPDF2
 #from prueba2 import *
 
 # Guarda en una lista las rutas de los archivos 
