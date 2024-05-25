@@ -22,7 +22,7 @@ def clean_text(text):
   #texto=leer_txt(text)
   # Pasar el texto a minúsculas
   texto = text.lower()
-  print("aiuda",texto)
+  #print("aiuda",texto)
  # Reemplazar letras con tilde por la misma letra sin tilde
   cleaned_text = re.sub(r'[áÁ]', 'a', texto)
   cleaned_text = re.sub(r'[éÉ]', 'e', cleaned_text)
@@ -39,7 +39,7 @@ def clean_text(text):
                  'aquellos','aqui','quien','quienesquiera','quienes','quienquiera','arriba','aquella','aquello','aquellas','aquel','mio','mi','tuyo','tu','tus','su','sus','nuestro','nos','le','suyo','suyos','mios','mia','mias','vuestro',
                  'tuya','tuyo','tuyos','tuyas','nuestra', 'nuestros','nuestras','suya','suyas','vuestra','vuestras','vuestros','esto','les','y','o',
                  'que','como','te','se','lo','le','nos','me','se','mi','su','nuestro','vuestro','tuyo','suyo','nuestro','vuestro',
-                 'unos','unas','unos','otros','otras','otra','otro','soy','eres','es','somos','sois','son','estoy','estamos'
+                 'unos','unas','una','unos','otros','otras','otra','otro','soy','eres','es','somos','sois','son','estoy','estamos'
                  ,'un'}
     # Crear un patrón de expresión regular que coincida con las palabras a eliminar
   pattern = re.compile(r'\b(' + '|'.join(re.escape(word) for word in words_to_remove) + r')\b', re.IGNORECASE)

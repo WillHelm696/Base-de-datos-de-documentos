@@ -1,5 +1,7 @@
 from TF_IDF import *
 from limpieza import *
+from similitud_coseno import *
+from ranking import *
 import os
 import pickle
 import PyPDF2
@@ -97,13 +99,13 @@ def bd_documents(lista):
         print(i," ",docTokenizedTF[i])
     """ 
 def search(textoProfe):
-    print("tipo de dato textoProfe: ",type(textoProfe))
+    #print("tipo de dato textoProfe: ",type(textoProfe))
     #Cargar archivos guardados en datbase
     UniverseWords=file_upload("UniverseWords")
     docTokenizedTF=file_upload("docTokenizedTF")
 
     textoProfeTokenizado_Universo=tokenizeWords(textoProfe)
-    print("Texto del profesor tokenizado y universo de palabras es: ",textoProfeTokenizado_Universo)
+    #print("Texto del profesor tokenizado y universo de palabras es: ",textoProfeTokenizado_Universo)
 
     textoProfeTokenizado = textoProfeTokenizado_Universo[0] #obtenemos el texto tokenizado en un diccionario
 
@@ -129,9 +131,14 @@ def search(textoProfe):
     # print(docTokenizedTF)
     # print(" ")
 
-    print("Texto del profesor tokenizado es: ",textoProfeTF)
+    #print("Texto del profesor tokenizado es: ",textoProfeTF)
 
     docTokenizedTF_IDF=Tf_Idf(docTokenizedTF,UniverseWords)
     print("docTokenizedTF_IDF es: ")
     for i in range(0,len(docTokenizedTF_IDF)):
         print(i," ",docTokenizedTF_IDF[i])
+
+    comparacion=comparetexts(textoProfeTF[0],docTokenizedTF_IDF)
+    print("Ranking")
+    ranked_docs=ranking(textoProfeTF[0],docTokenizedTF_IDF)
+    print(ranked_docs)
