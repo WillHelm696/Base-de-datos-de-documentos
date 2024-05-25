@@ -1,10 +1,8 @@
 from TF_IDF import *
-from triee import *
+import re
 import os
 import pickle
-import re
 import PyPDF2
-#from prueba2 import *
 
 # Guarda en una lista las rutas de los archivos 
 def load_file(ruta):
@@ -19,18 +17,32 @@ def load_file(ruta):
             archivos += load_file(contenido)
     return archivos
 
-#Funcion que guarda el document_bd en un pickle
-def save_file(documents_bd,save_path='database/document_bd.pkl'):
-    os.makedirs(os.path.dirname(save_path),exit_ok=True)
-    with open(save_path,'wb') as f:
-        pickle.dump(documents_bd,f)
-    print("document data-base created successfully")
+#Funcion que guarda archivo en un pickle en la carpeta database
+def save_file(data, file_name, save_path='database/'):
+    # Verificar si la carpeta existe, si no, crearla
+    if not os.path.exists(save_path):
+        os.makedirs(save_path)
+    # Guardar el archivo en la carpeta database
+    file_path = os.path.join(save_path, file_name + '.pkl')
 
-def load_bd(file_path='database/document_bd.pkl'):
-    #Cargar la base de datos desde el archivo picke
-    with open(file_path,'rb') as f:
-        documents_bd = pickle.load(f)
-    return documents_bd
+    # Verificar si el archivo ya existe
+    if os.path.exists(file_path):
+        # Si el archivo existe, borrarlo
+        os.remove(file_path)
+        #print(f"File '{file_name}.pkl' already exists. Overwriting...")
+
+    # Guardar los nuevos datos como un archivo nuevo
+    with open(file_path, 'wb') as f:
+        pickle.dump(data, f)
+    #print(f"New file '{file_name}.pkl' saved successfully in database folder.")
+    
+
+# Cargar el archivo desde la carpeta database
+def file_upload(file_name, load_path='database/'):
+    file_path = os.path.join(load_path, file_name + '.pkl')
+    with open(file_path, 'rb') as f:
+        data = pickle.load(f)
+    return data
 
 def leer_txt(item):
     with open(item,'r',encoding='utf-8') as archivo:
@@ -72,30 +84,6 @@ def clean_text(texto):
   cleaned_text = re.sub(r'\s+', ' ', cleaned_text).strip()
   return cleaned_text
 
-def eliminar_acentos(texto):
-    # Diccionario de caracteres con y sin acentos
-    acentos = {
-        'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u',
-        'Á': 'A', 'É': 'E', 'Í': 'I', 'Ó': 'O', 'Ú': 'U',
-        'à': 'a', 'è': 'e', 'ì': 'i', 'ò': 'o', 'ù': 'u',
-        'À': 'A', 'È': 'E', 'Ì': 'I', 'Ò': 'O', 'Ù': 'U',
-        'ä': 'a', 'ë': 'e', 'ï': 'i', 'ö': 'o', 'ü': 'u',
-        'Ä': 'A', 'Ë': 'E', 'Ï': 'I', 'Ö': 'O', 'Ü': 'U',
-        'â': 'a', 'ê': 'e', 'î': 'i', 'ô': 'o', 'û': 'u',
-        'Â': 'A', 'Ê': 'E', 'Î': 'I', 'Ô': 'O', 'Û': 'U',
-        'ã': 'a', 'õ': 'o', 'ñ': 'n', 'Ã': 'A', 'Õ': 'O', 'Ñ': 'N',
-        'å': 'a', 'Å': 'A', 'ç': 'c', 'Ç': 'C'
-    }
-    
-    # Crear la tabla de traducción
-    tabla_traduccion = str.maketrans(acentos)
-    
-    # Convertir el texto a minúsculas y aplicar la traducción
-    texto = texto.lower()
-    texto_sin_acentos = texto.translate(tabla_traduccion)
-    
-    return texto_sin_acentos
-
 def bd_documents(lista):
     documents = []
     for item in lista:
@@ -107,21 +95,63 @@ def bd_documents(lista):
         
         text = clean_text(text)
         documents.append(text)
+
     #Calcula para documento el tf-ydf de cada palabra y lo guardacomo tupla
-    bd_tf_idf = Tf_Idf(documents)
+    docTokenized_UniverseWords=tokenizeWords(documents)
+    docTokenized=docTokenized_UniverseWords[0] #obtenemos nuestros documentos tokenizados en un diccionario
+    allWordsOfTexts=docTokenized_UniverseWords[1] #obtenemos una lista de los documentos tokenizados
 
+    UniverseWords=docTokenized_UniverseWords[2] #obtenemos nuestro universo de palabras
+    docTokenizedTF=Tf(docTokenized,allWordsOfTexts) #Calculamos TF a cada palabra de nuestros documentos
+    
+    save_file(UniverseWords, "UniverseWords")
+    save_file(docTokenizedTF, "docTokenizedTF")
+    print('\n')
+    print("document data-base created successfully")
+    print('\n')
+    
     """
-    #Base de datos del la direcion y el trie de cada archivo
-    document_bd= {}
-    for index, sentence in enumerate(bd_tf_idf):
-        trie_doc = Trie()
-        for tupla in sentence:
-            #Inserta cada palabra y tf-idf en el triee
-            insert(trie_doc,tupla)
-        # Guarda como una tupla la direcion del archivo y el trie del archivo
-        document_bd[index]=(trie_doc,lista[index])
+    print("docTokenized es: ")
+    for i in range(0,len(docTokenized)):
+        print(i," ",docTokenized[i])
+    print(" ")
+    print("docTokenizedTF es: ")
+    for i in range(0,len(docTokenizedTF)):
+        print(i," ",docTokenizedTF[i])
+    """ 
+def search(textoProfe):
 
-    return bd_tf_idf
-    """
+    #Cargar archivos guardados en datbase
+    UniverseWords=file_upload("UniverseWords")
+    docTokenizedTF=file_upload("docTokenizedTF")
 
+    textoProfeTokenizado_Universo=tokenizeWords(textoProfe)
 
+    textoProfeTokenizado = textoProfeTokenizado_Universo[0] #obtenemos el texto tokenizado en un diccionario
+
+    todoTextoProfe = textoProfeTokenizado_Universo[1] #Texto vectorizado del profesor
+
+    universoTextoProfe = textoProfeTokenizado_Universo[2] #obtenemos el universo de palabras del texto
+
+    #Guardamos el universo de las palabras del texto en el universo de las palabras de documentos
+    for word in universoTextoProfe:
+        if word not in UniverseWords:
+            UniverseWords[word]=""
+    # print(" ")
+    # print("UniverseWord agregando las nuevas palabras es: ")
+    # print(UniverseWords)
+    # print(" ")
+
+    textoProfeTF=Tf(textoProfeTokenizado,todoTextoProfe) #obtenemos el texto tokenizado con su respectivo TF
+
+    #Agrego el texto del profesor tokenizado a la lista de documentos
+    docTokenizedTF[len(docTokenizedTF)]=textoProfeTF[0]
+    # print(" ")
+    # print("Agregando el texto del profe tokenizado a la lista de documentos queda: ")
+    # print(docTokenizedTF)
+    # print(" ")
+
+    docTokenizedTF_IDF=Tf_Idf(docTokenizedTF,UniverseWords)
+    print("docTokenizedTF_IDF es: ")
+    for i in range(0,len(docTokenizedTF_IDF)):
+        print(i," ",docTokenizedTF_IDF[i])
