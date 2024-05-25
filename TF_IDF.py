@@ -7,8 +7,9 @@ from limpieza import *
 
 def tokenizacion(texto):
     # Dividir el texto en tokens utilizando expresiones regulares
-    tokens = clean_text(texto)
+    tokens = clean_text(texto)    
     tokens = re.split(r'\s+', tokens)
+    print("probando texto input: ",tokens)
     return tokens
 
 #Realiza la Tokenizacion sobre todos los documentos y consegue el universo de palabras
@@ -30,6 +31,7 @@ def tokenizeWords(documents):
     #Retorna un diccionario con todos los documentos Tokenizados, una lista con todos los textos vectorizados 
     #de cada documento y un diccionario de todas las palabras que existen en nuestro universo, 
     #ambos devueltos en una tupla
+    print("probando todo xd: ",dictOfWords,allWordsOfText,UniverseWords)
     return (dictOfWords,allWordsOfText,UniverseWords)
 
 
