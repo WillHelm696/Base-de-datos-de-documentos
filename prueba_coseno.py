@@ -20,13 +20,13 @@ print("docTokenizedTF es: ")
 for i in range(0,len(documents_tokenizados_tf)):
      print(i," ",documents_tokenizados_tf[i])
 
-
+'''
 print("calcular TF-IDF")
 universo=documents_tokenizados[2]
 tfidf=Tf_Idf(documents_tokenizados_tf,universo)
 for i in range(0,len(tfidf)):
      print(i," ",tfidf[i])
-
+'''
 text1=documents_tokenizados_tf[0]
 text2=documents_tokenizados_tf[1]
 #text1=tfidf[0]
