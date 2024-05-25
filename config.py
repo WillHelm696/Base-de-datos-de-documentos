@@ -1,9 +1,10 @@
+from TF_IDF import *
+from limpieza import *
 import os
 import pickle
 import PyPDF2
-from limpieza import clean_text
-from TF_IDF import *
-from limpieza import tokenizeWords
+
+
 
 
 # Guarda en una lista las rutas de los archivos 

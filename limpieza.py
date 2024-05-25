@@ -22,7 +22,7 @@ def clean_text(text):
   #texto=leer_txt(text)
   # Pasar el texto a minúsculas
   texto = text.lower()
- 
+  print("aiuda",texto)
  # Reemplazar letras con tilde por la misma letra sin tilde
   cleaned_text = re.sub(r'[áÁ]', 'a', texto)
   cleaned_text = re.sub(r'[éÉ]', 'e', cleaned_text)

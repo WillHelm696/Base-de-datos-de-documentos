@@ -18,15 +18,24 @@ def tokenizeWords(documents):
     dictOfWords = {} #Diccionario 
     allWordsOfText=[] #Lista que contrenda todo el documento vectorizado
     UniverseWords = {} #Diccionario que contendra todas las palabras que existen en nuestro universo
-    for index, sentence in enumerate(documents): #enumerate devuelve la posicion de la lista (index) junto con su contenido (sentense)
-        # Tokeniza las palabras en la oración
-        tokenizeWords = tokenizacion(sentence)
-        dictOfWords[index]={}
-        # Almacena las palabras y su frecuencia en el documento actual
+    if type(documents) is str:
+        tokenizeWords = tokenizacion(documents)
+        dictOfWords[0]={}
         for word in tokenizeWords:
-            dictOfWords[index][word]=tokenizeWords.count(word)
+            dictOfWords[0][word]=tokenizeWords.count(word)
             UniverseWords[word]=""
-        allWordsOfText.append(tokenizeWords)
+            allWordsOfText.append(tokenizeWords)
+        return (dictOfWords,allWordsOfText,UniverseWords)
+    else:
+        for index, sentence in enumerate(documents): #enumerate devuelve la posicion de la lista (index) junto con su contenido (sentense)
+            # Tokeniza las palabras en la oración
+            tokenizeWords = tokenizacion(sentence)
+            dictOfWords[index]={}
+            # Almacena las palabras y su frecuencia en el documento actual
+            for word in tokenizeWords:
+                dictOfWords[index][word]=tokenizeWords.count(word)
+                UniverseWords[word]=""
+            allWordsOfText.append(tokenizeWords)
 
     #Retorna un diccionario con todos los documentos Tokenizados, una lista con todos los textos vectorizados 
     #de cada documento y un diccionario de todas las palabras que existen en nuestro universo, 
