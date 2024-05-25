@@ -4,7 +4,7 @@ import argparse
 import sys
 #from limpieza import *
 
-def create_bd(ruta):
+"""def create_bd(ruta):
 #busca la dirrecon de los archivos
 
 #ruta=os.getcwd()
@@ -44,3 +44,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+"""

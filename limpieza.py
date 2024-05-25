@@ -19,9 +19,9 @@ def convert_to_trie(archivos):
 
 
 def clean_text(text):
-  texto=leer_txt(text)
+  #texto=leer_txt(text)
   # Pasar el texto a minúsculas
-  texto = texto.lower()
+  texto = text.lower()
   words_to_remove={'si', 'a', 'sí', 'ante', 'bajo', 'cabe', 'con', 'contra', 'de', 'desde', 'durante', 'en', 'entre', 'hacia', 'hasta', 
                  'mediante', 'para', 'por', 'pro','según', 'sin', 'so', 'sobre', 'tras', 'versus','vía', 'la','las','el','los'
                  'él','ella','ellos','yo','nosotros','vosotros','ustedes','usted','tú','vos','ellas','este','estos','ésta','esta','éste','éstas','esa','eso','esas','esos',
@@ -45,8 +45,8 @@ def clean_text(text):
 
   # Eliminar símbolos y números usando una expresión regular
   cleaned_text = re.sub(r'[^a-zA-Z\s]', '', cleaned_text)
+   
 
   # Eliminar espacios extra generados por las eliminaciones
   cleaned_text = re.sub(r'\s+', ' ', cleaned_text).strip()
-  
   return cleaned_text

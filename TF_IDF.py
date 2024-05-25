@@ -7,7 +7,8 @@ from limpieza import *
 
 def tokenizacion(texto):
     # Dividir el texto en tokens utilizando expresiones regulares
-    tokens = re.findall(r'\b\w+\b', texto)
+    tokens = clean_text(texto)
+    tokens = re.split(r'\s+', tokens)
     return tokens
 
 #Realiza la Tokenizacion sobre todos los documentos y consegue el universo de palabras
