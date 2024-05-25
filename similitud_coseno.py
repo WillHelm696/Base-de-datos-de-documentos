@@ -1,16 +1,18 @@
-import numpy as np
+def vector_module(text):
+    mod=0
+    for word in text:
+        mod+=text[word]*text[word]
+    mod=np.sqrt(mod)
+    return mod
 
 def cosine_similarity(text1,text2):
   if text1 == text2:
     return 1.0
-
-  sumxx = 0
-  sumyy = 0
+  mod1=vector_module(text1)
+  mod2=vector_module(text2)
+  if mod1==0 or mod2==0:
+      return 0
   sumxy = 0
-  
   for i in text1:
-    sumxx += int(text1[i][1])**2 #acceder al tf de la palabra
-    if i in text2: #si la palabra se encuentra en el segundo texto
-        sumyy += int(text2[i][1])**2
-        sumxy += int(text1[i][1])*int(text2[i][1])
-  return sumxy/np.sqrt(sumxx*sumyy)
+        sumxy += text1[i]*text2[i]
+  return sumxy/(mod1*mod2)
