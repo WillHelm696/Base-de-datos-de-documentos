@@ -19,12 +19,10 @@ def convert_to_trie(archivos):
 
 
 def clean_text(text):
-  #texto=leer_txt(text)
   # Pasar el texto a minúsculas
-  texto = text.lower()
-  #print("aiuda",texto)
+  cleaned_text = text.lower()
  # Reemplazar letras con tilde por la misma letra sin tilde
-  cleaned_text = re.sub(r'[áÁ]', 'a', texto)
+  cleaned_text = re.sub(r'[áÁ]', 'a', cleaned_text)
   cleaned_text = re.sub(r'[éÉ]', 'e', cleaned_text)
   cleaned_text = re.sub(r'[íÍ]', 'i', cleaned_text)
   cleaned_text = re.sub(r'[óÓ]', 'o', cleaned_text)
@@ -41,11 +39,11 @@ def clean_text(text):
                  'que','como','te','se','lo','le','nos','me','se','mi','su','nuestro','vuestro','tuyo','suyo','nuestro','vuestro',
                  'unos','unas','una','unos','otros','otras','otra','otro','soy','eres','es','somos','sois','son','estoy','estamos'
                  ,'un'}
-    # Crear un patrón de expresión regular que coincida con las palabras a eliminar
+# Crear un patrón de expresión regular que coincida con las palabras a eliminar
   pattern = re.compile(r'\b(' + '|'.join(re.escape(word) for word in words_to_remove) + r')\b', re.IGNORECASE)
   
   # Usar la función sub de re para reemplazar las palabras no deseadas con una cadena vacía
-  cleaned_text = pattern.sub('', texto)
+  cleaned_text = pattern.sub('', cleaned_text)
 
   # Eliminar espacios extra generados por las eliminaciones
   cleaned_text = re.sub(r'\s+', ' ', cleaned_text).strip()

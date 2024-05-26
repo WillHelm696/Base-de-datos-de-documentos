@@ -32,13 +32,9 @@ def save_file(data, file_name, save_path='database/'):
     if os.path.exists(file_path):
         # Si el archivo existe, borrarlo
         os.remove(file_path)
-        #print(f"File '{file_name}.pkl' already exists. Overwriting...")
-
     # Guardar los nuevos datos como un archivo nuevo
     with open(file_path, 'wb') as f:
         pickle.dump(data, f)
-    #print(f"New file '{file_name}.pkl' saved successfully in database folder.")
-    
 
 # Cargar el archivo desde la carpeta database
 def file_upload(file_name, load_path='database/'):
@@ -73,10 +69,9 @@ def bd_documents(lista):
         text = clean_text(text)
         documents.append(text)
 
-    file_names = [os.path.splitext(os.path.basename(item))[0] for item in lista]
-    rutas_textos = {item: contenido for item, contenido in zip(file_names, lista)}
-    #print("Creando base de datos", rutas_textos)
-    #Calcula para documento el tf-ydf de cada palabra y lo guardacomo tupla
+    file_names = [os.path.splitext(os.path.basename(item))[0] for item in lista] #guarda los nombres para usarlos de key
+    rutas_textos = {item: contenido for item, contenido in zip(file_names, lista)} #guarda las rutas
+    #Calcula para documento el tf-idf de cada palabra y lo guardacomo tupla
     docTokenized_UniverseWords=tokenizeWords(documents)
     docTokenized=docTokenized_UniverseWords[0] #obtenemos nuestros documentos tokenizados en un diccionario
     allWordsOfTexts=docTokenized_UniverseWords[1] #obtenemos una lista de los documentos tokenizados
@@ -96,58 +91,44 @@ def bd_documents(lista):
     print("document data-base created successfully")
     print('\n')
     
-    """
-    print("docTokenized es: ")
-    for i in range(0,len(docTokenized)):
-        print(i," ",docTokenized[i])
-    print(" ")
-    print("docTokenizedTF es: ")
-    for i in range(0,len(docTokenizedTF)):
-        print(i," ",docTokenizedTF[i])
-    """ 
 def search(textoProfe):
     #Cargar archivos guardados en datbase
     UniverseWords=file_upload("UniverseWords") #words sin tf, limpias
     docTokenizedTF=file_upload("docTokenizedTF") #lista de docs tokenizados con tf, usar nombre como key 
     rutas_textos=file_upload("rutas_textos") #rutas de los textos
-    #print("Probando doctokenized", type(docTokenizedTF),docTokenizedTF.keys(), docTokenizedTF)
     textoProfeTokenizado_Universo=tokenizeWords(textoProfe)
-    #print("Texto del profesor tokenizado y universo de palabras es: ",textoProfeTokenizado_Universo)
-
     textoProfeTokenizado = textoProfeTokenizado_Universo[0] #obtenemos el texto tokenizado en un diccionario
-
     todoTextoProfe = textoProfeTokenizado_Universo[1] #Texto vectorizado del profesor
-
     universoTextoProfe = textoProfeTokenizado_Universo[2] #obtenemos el universo de palabras del texto
-
     #Guardamos el universo de las palabras del texto en el universo de las palabras de documentos
     for word in universoTextoProfe:
         if word not in UniverseWords:
             UniverseWords[word]=""
-    # print(" ")
-    # print("UniverseWord agregando las nuevas palabras es: ")
-    # print(UniverseWords)
-    # print(" ")
 
     textoProfeTF=Tf(textoProfeTokenizado,todoTextoProfe) #obtenemos el texto tokenizado con su respectivo TF
 
     #Agrego el texto del profesor tokenizado a la lista de documentos
-    ##docTokenizedTF[len(docTokenizedTF)]=textoProfeTF[0]
     docTokenizedTF[len(docTokenizedTF)] = textoProfeTF[0]
-    # print(" ")
-    # print("Agregando el texto del profe tokenizado a la lista de documentos queda: ")
-    # print(docTokenizedTF)
-    # print(" ")
-
-    #print("Texto del profesor tokenizado es: ",textoProfeTF)
-
-    ##docTokenizedTF_IDF=Tf_Idf(docTokenizedTF,UniverseWords)
     docTokenizedTF_IDF=Tf_Idf(docTokenizedTF,UniverseWords)
-    #print("docTokenizedTF_IDF es: ")
-    #for i in range(0,len(docTokenizedTF_IDF)):
-    #print(docTokenizedTF_IDF)
-
-    comparacion=comparetexts(textoProfeTF[0],docTokenizedTF_IDF)
+    
     print("Ranking")
     ranked_docs=ranking(textoProfeTF[0],docTokenizedTF_IDF,rutas_textos)
-    print(ranked_docs)
+    ranked_docs = ranked_docs[1:] #elimina el primer elemento (el mismo texto del profesor)
+    if len(ranked_docs)<10: #como es top 10 si hay menos de 10 documentos se muestra solo los que hay
+        for i in range(0,len(ranked_docs)):
+            #agrega el texto al ranking
+            path=ranked_docs[i][2]
+            if path.endswith(".pdf"):
+                text = leer_pdf(path)
+            elif path.endswith(".txt"):
+                text = leer_txt(path)
+            ranked_docs[i] = ranked_docs[i][:3] + (text,) + ranked_docs[i][4:]
+    else:
+        for i in range(0,10): #si hay mas de 10 documentos se muestra solo los 10 primeros
+            path=ranked_docs[i][2]
+            if path.endswith(".pdf"):
+                text = leer_pdf(path)
+            elif path.endswith(".txt"):
+                text = leer_txt(path)
+            ranked_docs[i] = ranked_docs[i][:3] + (text,) + ranked_docs[i][4:]
+    #print(ranked_docs)

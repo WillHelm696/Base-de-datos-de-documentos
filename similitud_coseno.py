@@ -8,6 +8,7 @@ def vector_module(text):
     mod=np.sqrt(mod)
     return mod
 
+
 def cosine_similarity(text1,text2):
   if text1 == text2:
     return 1.0
@@ -22,18 +23,13 @@ def cosine_similarity(text1,text2):
 
 def comparetexts(input_text,allDocuments):
     documents_compared={} #dict que guarda todos los documentos vectorizados en base al texto entrada
-    #print("allDocuments: ",allDocuments)
     for doc in allDocuments:
         document=allDocuments[doc] #accedo al dict del documento 
-        #print("documento: ",type(document))
         doc_vector={}
         for word in input_text: #verifico cada palabra del texto entrada
-            #print(type(input_text))
-            #print("tipo palabra", type(word))
             if word in document:
                  doc_vector[word]=document[word] #si se encuentra la palabra se toma su tf
             else:
                  doc_vector[word]=0.0 #sino, es cero
         documents_compared[doc]=doc_vector #agregar el vector al diccionario
-        #print("quiero ver algo",doc_vector)
     return documents_compared
