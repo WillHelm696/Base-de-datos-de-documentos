@@ -9,7 +9,7 @@ def tokenizacion(texto):
     # Dividir el texto en tokens utilizando expresiones regulares
     tokens = clean_text(texto)    
     tokens = re.split(r'\s+', tokens)
-    print("probando texto input: ",tokens)
+    #print("probando texto input: ",tokens)
     return tokens
 
 #Realiza la Tokenizacion sobre todos los documentos y consegue el universo de palabras
@@ -40,7 +40,7 @@ def tokenizeWords(documents):
     #Retorna un diccionario con todos los documentos Tokenizados, una lista con todos los textos vectorizados 
     #de cada documento y un diccionario de todas las palabras que existen en nuestro universo, 
     #ambos devueltos en una tupla
-    print("probando todo xd: ",dictOfWords,allWordsOfText,UniverseWords)
+    #print("probando todo xd: ",dictOfWords,allWordsOfText,UniverseWords)
     return (dictOfWords,allWordsOfText,UniverseWords)
 
 
@@ -68,8 +68,8 @@ def Tf_Idf(docTokenizedTF,UniverseWords):
     numOfWordsInDocuments = {}
     for word in UniverseWords: #enumerate devuelve la posicion de la lista (index) junto con su contenido (voc)
         count = 0
-        for i in range(0,len(docTokenizedTF)):
-            if word in docTokenizedTF[i]:
+        for item in docTokenizedTF:
+            if word in docTokenizedTF[item]:
                 count += 1
         #Guarda en "numOfWordsInDocuments" el universo de palabras junto con la cantidad de 
         #documentos que la contienen
@@ -77,20 +77,20 @@ def Tf_Idf(docTokenizedTF,UniverseWords):
 
     # ---- Calcular IDF ----
     dictOFIDFNoDuplicates = {}
-    for i in range(len(docTokenizedTF)):
-        dictOFIDFNoDuplicates[i]={}
-        for word in docTokenizedTF[i]:
+    for item in docTokenizedTF:
+        dictOFIDFNoDuplicates[item]={}
+        for word in docTokenizedTF[item]:
             # Calcular IDF utilizando la fórmula log(N/n)
-            dictOFIDFNoDuplicates[i][word]=math.log(len(docTokenizedTF)/numOfWordsInDocuments[word])
+            dictOFIDFNoDuplicates[item][word]=math.log(len(docTokenizedTF)/numOfWordsInDocuments[word])
         #Guarda en "dictOFIDFNoDuplicates" la misma lista de palabras que "docTokenizedTF" pero con su 
         #respectivo IDF
 
     #Multiplicar TF por IDF para obtener TF-IDF
     dictOFTF_IDF = {}
-    for i in range(len(docTokenizedTF)):
-        dictOFTF_IDF[i]={}
-        for word in docTokenizedTF[i]:
-            dictOFTF_IDF[i][word]=docTokenizedTF[i][word]*dictOFIDFNoDuplicates[i][word]
+    for item in docTokenizedTF:
+        dictOFTF_IDF[item]={}
+        for word in docTokenizedTF[item]:
+            dictOFTF_IDF[item][word]=docTokenizedTF[item][word]*dictOFIDFNoDuplicates[item][word]
     #Guarda en "dictOFTF_IDF" las palabras del documento "i" con sus respectivos TF-IDF
     #devuelve un diccionario donde cada posicion "i" es una lista de las palabras del documento "i" con su respectivo TF-IDF
     return dictOFTF_IDF 

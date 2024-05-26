@@ -7,8 +7,6 @@ import pickle
 import PyPDF2
 
 
-
-
 # Guarda en una lista las rutas de los archivos 
 def load_file(ruta):
     lista = os.listdir(ruta)
@@ -75,16 +73,25 @@ def bd_documents(lista):
         text = clean_text(text)
         documents.append(text)
 
+    file_names = [os.path.splitext(os.path.basename(item))[0] for item in lista]
+    rutas_textos = {item: contenido for item, contenido in zip(file_names, lista)}
+    #print("Creando base de datos", rutas_textos)
     #Calcula para documento el tf-ydf de cada palabra y lo guardacomo tupla
     docTokenized_UniverseWords=tokenizeWords(documents)
     docTokenized=docTokenized_UniverseWords[0] #obtenemos nuestros documentos tokenizados en un diccionario
     allWordsOfTexts=docTokenized_UniverseWords[1] #obtenemos una lista de los documentos tokenizados
 
     UniverseWords=docTokenized_UniverseWords[2] #obtenemos nuestro universo de palabras
-    docTokenizedTF=Tf(docTokenized,allWordsOfTexts) #Calculamos TF a cada palabra de nuestros documentos
+    docTokenizedTF2=Tf(docTokenized,allWordsOfTexts) #Calculamos TF a cada palabra de nuestros documentos
+    #guardar como hash usando el nombre del archivo como key
+    docTokenizedTF = {}
     
+    for i, item in enumerate(file_names):
+        docTokenizedTF[item] = docTokenizedTF2[i]
+
     save_file(UniverseWords, "UniverseWords")
     save_file(docTokenizedTF, "docTokenizedTF")
+    save_file(rutas_textos, "rutas_textos")
     print('\n')
     print("document data-base created successfully")
     print('\n')
@@ -99,11 +106,11 @@ def bd_documents(lista):
         print(i," ",docTokenizedTF[i])
     """ 
 def search(textoProfe):
-    #print("tipo de dato textoProfe: ",type(textoProfe))
     #Cargar archivos guardados en datbase
-    UniverseWords=file_upload("UniverseWords")
-    docTokenizedTF=file_upload("docTokenizedTF")
-
+    UniverseWords=file_upload("UniverseWords") #words sin tf, limpias
+    docTokenizedTF=file_upload("docTokenizedTF") #lista de docs tokenizados con tf, usar nombre como key 
+    rutas_textos=file_upload("rutas_textos") #rutas de los textos
+    #print("Probando doctokenized", type(docTokenizedTF),docTokenizedTF.keys(), docTokenizedTF)
     textoProfeTokenizado_Universo=tokenizeWords(textoProfe)
     #print("Texto del profesor tokenizado y universo de palabras es: ",textoProfeTokenizado_Universo)
 
@@ -125,7 +132,8 @@ def search(textoProfe):
     textoProfeTF=Tf(textoProfeTokenizado,todoTextoProfe) #obtenemos el texto tokenizado con su respectivo TF
 
     #Agrego el texto del profesor tokenizado a la lista de documentos
-    docTokenizedTF[len(docTokenizedTF)]=textoProfeTF[0]
+    ##docTokenizedTF[len(docTokenizedTF)]=textoProfeTF[0]
+    docTokenizedTF[len(docTokenizedTF)] = textoProfeTF[0]
     # print(" ")
     # print("Agregando el texto del profe tokenizado a la lista de documentos queda: ")
     # print(docTokenizedTF)
@@ -133,12 +141,13 @@ def search(textoProfe):
 
     #print("Texto del profesor tokenizado es: ",textoProfeTF)
 
+    ##docTokenizedTF_IDF=Tf_Idf(docTokenizedTF,UniverseWords)
     docTokenizedTF_IDF=Tf_Idf(docTokenizedTF,UniverseWords)
-    print("docTokenizedTF_IDF es: ")
-    for i in range(0,len(docTokenizedTF_IDF)):
-        print(i," ",docTokenizedTF_IDF[i])
+    #print("docTokenizedTF_IDF es: ")
+    #for i in range(0,len(docTokenizedTF_IDF)):
+    #print(docTokenizedTF_IDF)
 
     comparacion=comparetexts(textoProfeTF[0],docTokenizedTF_IDF)
     print("Ranking")
-    ranked_docs=ranking(textoProfeTF[0],docTokenizedTF_IDF)
+    ranked_docs=ranking(textoProfeTF[0],docTokenizedTF_IDF,rutas_textos)
     print(ranked_docs)
