@@ -113,7 +113,7 @@ def search(textoProfe):
     
     print("Ranking")
     ranked_docs=ranking(textoProfeTF[0],docTokenizedTF_IDF,rutas_textos)
-    ranked_docs = ranked_docs[1:] #elimina el primer elemento (el mismo texto del profesor)
+    #ranked_docs = ranked_docs[1:] #elimina el primer elemento (el mismo texto del profesor)
     if len(ranked_docs)<10: #como es top 10 si hay menos de 10 documentos se muestra solo los que hay
         for i in range(0,len(ranked_docs)):
             #agrega el texto al ranking
@@ -131,4 +131,4 @@ def search(textoProfe):
             elif path.endswith(".txt"):
                 text = leer_txt(path)
             ranked_docs[i] = ranked_docs[i][:3] + (text,) + ranked_docs[i][4:]
-    #print(ranked_docs)
+    print(ranked_docs)

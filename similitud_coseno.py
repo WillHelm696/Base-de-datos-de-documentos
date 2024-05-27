@@ -21,14 +21,15 @@ def cosine_similarity(text1,text2):
         sumxy += text1[i]*text2[i]
   return sumxy/(mod1*mod2)
 
+
 def comparetexts(input_text,allDocuments):
     documents_compared={} #dict que guarda todos los documentos vectorizados en base al texto entrada
     for doc in allDocuments:
         document=allDocuments[doc] #accedo al dict del documento 
         doc_vector={}
-        for word in input_text: #verifico cada palabra del texto entrada
-            if word in document:
-                 doc_vector[word]=document[word] #si se encuentra la palabra se toma su tf
+        for word in document: #verifico cada palabra del dict del documento si se encuentra en el texto ingresado por el profesor
+            if word in input_text:
+                 doc_vector[word]=input_text[word] #si se encuentra la palabra se toma su tf
             else:
                  doc_vector[word]=0.0 #sino, es cero
         documents_compared[doc]=doc_vector #agregar el vector al diccionario
