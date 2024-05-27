@@ -131,4 +131,15 @@ def search(textoProfe):
             elif path.endswith(".txt"):
                 text = leer_txt(path)
             ranked_docs[i] = ranked_docs[i][:3] + (text,) + ranked_docs[i][4:]
+    
+    for index in ranked_docs:
+        print("---------------------------------------------------------------------------------------------")
+        print('\n')
+        print(f"frecuencia: {index[0]}")
+        print('\n')
+        print(f"titulo: {index[1]}")
+        print('\n')
+        print(f"Direccion: {index[2]}")
+        print('\n')
+        print(index[3])
     #print(ranked_docs)
