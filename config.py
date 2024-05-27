@@ -96,6 +96,7 @@ def search(textoProfe):
     UniverseWords=file_upload("UniverseWords") #words sin tf, limpias
     docTokenizedTF=file_upload("docTokenizedTF") #lista de docs tokenizados con tf, usar nombre como key 
     rutas_textos=file_upload("rutas_textos") #rutas de los textos
+    
     textoProfeTokenizado_Universo=tokenizeWords(textoProfe)
     textoProfeTokenizado = textoProfeTokenizado_Universo[0] #obtenemos el texto tokenizado en un diccionario
     todoTextoProfe = textoProfeTokenizado_Universo[1] #Texto vectorizado del profesor

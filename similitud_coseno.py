@@ -21,7 +21,7 @@ def cosine_similarity(text1,text2):
         sumxy += text1[i]*text2[i]
   return sumxy/(mod1*mod2)
 
-
+#recibe un hash con tf-idf del profe, y un hash de hash con tf-idf de todos los documentos  
 def comparetexts(input_text,allDocuments):
     documents_compared={} #dict que guarda todos los documentos vectorizados en base al texto entrada
     for doc in allDocuments:
