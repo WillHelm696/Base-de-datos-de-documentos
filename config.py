@@ -131,4 +131,4 @@ def search(textoProfe):
             elif path.endswith(".txt"):
                 text = leer_txt(path)
             ranked_docs[i] = ranked_docs[i][:3] + (text,) + ranked_docs[i][4:]
-    print(ranked_docs)
+    #print(ranked_docs)
