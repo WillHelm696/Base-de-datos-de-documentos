@@ -7,7 +7,7 @@ import sys
 def create_bd(ruta):
     #busca la dirrecon de los archivos
     archivos = load_file(ruta)
-    bd_documents(archivos)
+    new_bd(archivos)
 
 def shearch_text(texto):   
     print("Busqueda")

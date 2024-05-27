@@ -71,7 +71,7 @@ def bd_documents(lista):
 
     file_names = [os.path.splitext(os.path.basename(item))[0] for item in lista] #guarda los nombres para usarlos de key
     rutas_textos = {item: contenido for item, contenido in zip(file_names, lista)} #guarda las rutas
-    #Calcula para documento el tf-idf de cada palabra y lo guardacomo tupla
+    #Calcula para cada documento el tf de cada palabra y lo guardacomo tupla
     docTokenized_UniverseWords=tokenizeWords(documents)
     docTokenized=docTokenized_UniverseWords[0] #obtenemos nuestros documentos tokenizados en un diccionario
     allWordsOfTexts=docTokenized_UniverseWords[1] #obtenemos una lista de los documentos tokenizados
