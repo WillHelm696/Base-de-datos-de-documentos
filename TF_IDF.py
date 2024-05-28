@@ -1,6 +1,7 @@
 import re
 import math
 from limpieza import *
+from Trie2 import *
 
     #----Calculate term frecuency---
     #Primero: tokenizar palabras
@@ -22,7 +23,7 @@ def tokenizeWords(documents):
         for word in tokenizeWords:
             dictOfWords[0][word]=tokenizeWords.count(word)
             UniverseWords[word]=""
-            allWordsOfText.append(tokenizeWords)
+        allWordsOfText.append(tokenizeWords)
         return (dictOfWords,allWordsOfText,UniverseWords)
     else:
         for index, sentence in enumerate(documents): #enumerate devuelve la posicion de la lista (index) junto con su contenido (sentense)
@@ -59,6 +60,14 @@ def Tf(dictOfWords,allWordsOfTexts):
 def Tf_Idf(docTokenizedTF,UniverseWords):
     # Calcular el número de documentos donde aparece cada término
     numOfWordsInDocuments = {}
+    #print(type(docTokenizedTF))
+    for item in docTokenizedTF:
+        #print("en el for")
+        #print(type(docTokenizedTF[item]))
+        if type(docTokenizedTF[item]) != dict:
+            #print("entre al tf_idf")
+            #print(type(docTokenizedTF[item]))
+            docTokenizedTF[item]=get_words(docTokenizedTF[item].root)
     for word in UniverseWords: #enumerate devuelve la posicion de la lista (index) junto con su contenido (voc)
         count = 0
         for item in docTokenizedTF:

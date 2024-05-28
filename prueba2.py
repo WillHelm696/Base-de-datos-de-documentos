@@ -26,11 +26,11 @@ def new_bd(lista):
     for i, item in enumerate(file_names):
         tokens=documents[i]
         tokenized_docs[item]=re.split(r'\s+', tokens)
-    #print(tokenized_docs)
+    #tokeniza, calcula tf y devuelve universe words
     tokens_trie=insert_tokens(tokenized_docs)
     tokenized_docs_tf=tokens_trie[0]
-    all_words=tokens_trie[1]
-    save_file(all_words, "all_words")
+    uninverse_trie=tokens_trie[1]
+    save_file(uninverse_trie, "universe_trie")
     save_file(tokenized_docs_tf, "tokenized_docs_tf")
     save_file(rutas_textos, "rutas_textos")
     
@@ -41,17 +41,60 @@ def new_bd(lista):
 
 def new_search(input):
     #Cargar archivos guardados en database
-    print("holis")
-    all_words=file_upload("all_words") 
+    #print("holis")
+    universe_trie=file_upload("universe_trie") 
     tokenized_docs_tf=file_upload("tokenized_docs_tf")
     rutas_textos=file_upload("rutas_textos")
+    #procesar texto entrada 
+    input=tokenizeWords(input)
+    input_tokenized= input[0]
+    #print(input_tokenized)
+    #agregar palabras input al universo
+    for word in input_tokenized[0]:
+        insert(universe_trie,word)
+    #calcular tf de las palabras del input
+    #print(type(input[1][0]))
+    tf_input=Tf(input_tokenized, input[1][0])
+    #Agrego el texto del profesor tokenizado a la lista de documentos
+    print(tokenized_docs_tf)
+    tokenized_docs_tf[len(tokenized_docs_tf)] = tf_input[0]
+    universe_words=get_words(universe_trie.root)
+    #print(type(tokenized_docs_tf), tokenized_docs_tf)
+    tf_idf_docs=Tf_Idf(tokenized_docs_tf,universe_words)
 
-    input_cleaned=clean_text(input)
-    input_tokenized= re.split(r'\s+', input_cleaned)
-    input_trie=Trie()
-    for word in input_tokenized:
-        insert(input_trie,word)
-    #printTrie(input_trie.root)
+    print("Ranking")
+    ranked_docs=ranking(tf_input[0],tf_idf_docs,rutas_textos)
+    #ranked_docs = ranked_docs[1:] #elimina el primer elemento (el mismo texto del profesor)
+    if len(ranked_docs)<10: #como es top 10 si hay menos de 10 documentos se muestra solo los que hay
+        for i in range(0,len(ranked_docs)):
+            #agrega el texto al ranking
+            path=ranked_docs[i][2]
+            if path.endswith(".pdf"):
+                text = leer_pdf(path)
+            elif path.endswith(".txt"):
+                text = leer_txt(path)
+            ranked_docs[i] = ranked_docs[i][:3] + (text,) + ranked_docs[i][4:]
+    else:
+        for i in range(0,10): #si hay mas de 10 documentos se muestra solo los 10 primeros
+            path=ranked_docs[i][2]
+            if path.endswith(".pdf"):
+                text = leer_pdf(path)
+            elif path.endswith(".txt"):
+                text = leer_txt(path)
+            ranked_docs[i] = ranked_docs[i][:3] + (text,) + ranked_docs[i][4:]
+            
+    for index in ranked_docs:
+        print("---------------------------------------------------------------------------------------------")
+        print('\n')
+        print(f"frecuencia: {index[0]}")
+        print('\n')
+        print(f"titulo: {index[1]}")
+        print('\n')
+        print(f"Direccion: {index[2]}")
+        print('\n')
+        print(index[3])
+
+
     return
 
 
@@ -61,6 +104,7 @@ def comparetexts_new(input_text,allDocuments):
     documents_compared={} #dict que guarda todos los documentos vectorizados en base al texto entrada
     for doc in allDocuments:
         document=allDocuments[doc] #accedo al dict del documento 
+        document=get_words(document)
         doc_vector={}
         for word in document: #verifico cada palabra del dict del documento si se encuentra en el texto ingresado por el profesor
             if word in input_text:
@@ -69,29 +113,18 @@ def comparetexts_new(input_text,allDocuments):
                  doc_vector[word]=0.0 #sino, es cero
         documents_compared[doc]=doc_vector #agregar el vector al diccionario
     return documents_compared
+
 #recibe los tokens de los documentos y los inserta en un trie, devuelve un diccionario con los tries de cada documento
 #y un trie con todas las palabras de todos los documentos
 def insert_tokens(tokens):
-
     dict_trie={}
     universe_trie=Trie()
     for key in tokens:
+        #por cada documento se crea un trie y se insertan las palabras
         list_tokens = tokens[key]
         trie_words=Trie()
         for word in list_tokens:
             insert(trie_words,word)
-            insert(universe_trie,word)
-            #trie_words.root.all_words=len(list_tokens)
-            #universe_trie.root.all_words+=len(list_tokens)
+            insert(universe_trie,word) #inserto todas las palabras en trie universal
         dict_trie[key]=trie_words
-    lista_keys=list(dict_trie.keys())
-    #print(lista_keys)
-    #printTrie(dict_trie[lista_keys[0]].root)
-    #print(dict_trie)
-    #print("probando print")
-    root=dict_trie["El_Misterio_de_la_Fórmula_Perdida"].root
-    #printTrie(root)
-    #print(root.all_words)
-    #print(get_words(root))
-    
     return (dict_trie,universe_trie)
