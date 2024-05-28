@@ -8,7 +8,7 @@ def vector_module(text):
     mod=np.sqrt(mod)
     return mod
 
-
+#realiza las cuentas de similitud coseno entre dos textos vectorizados
 def cosine_similarity(text1,text2):
   if text1 == text2:
     return 1.0

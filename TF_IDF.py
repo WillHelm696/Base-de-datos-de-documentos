@@ -1,11 +1,9 @@
 import re
 import math
 from limpieza import *
-from Trie2 import *
+from trie import *
 
-    #----Calculate term frecuency---
-    #Primero: tokenizar palabras
-
+#Tokenizar texto en palabras
 def tokenizacion(texto):
     # Dividir el texto en tokens utilizando expresiones regulares
     tokens = clean_text(texto)    
@@ -36,9 +34,8 @@ def tokenizeWords(documents):
                 UniverseWords[word]=""
             allWordsOfText.append(tokenizeWords)
 
-    #Retorna un diccionario con todos los documentos Tokenizados, una lista con todos los textos vectorizados 
-    #de cada documento y un diccionario de todas las palabras que existen en nuestro universo, 
-    #ambos devueltos en una tupla
+#Retorna un diccionario con todos los documentos Tokenizados, una lista con todos los textos vectorizados 
+#de cada documento y un diccionario de todas las palabras que existen en nuestro universo, ambos devueltos en una tupla
     return (dictOfWords,allWordsOfText,UniverseWords)
 
 #Recibe un diccionario con los textos de cada documento por posicion
@@ -60,20 +57,15 @@ def Tf(dictOfWords,allWordsOfTexts):
 def Tf_Idf(docTokenizedTF,UniverseWords):
     # Calcular el número de documentos donde aparece cada término
     numOfWordsInDocuments = {}
-    #print(type(docTokenizedTF))
     for item in docTokenizedTF:
-        #print("en el for")
-        #print(type(docTokenizedTF[item]))
         if type(docTokenizedTF[item]) != dict:
-            #print("entre al tf_idf")
-            #print(type(docTokenizedTF[item]))
             docTokenizedTF[item]=get_words(docTokenizedTF[item].root)
     for word in UniverseWords: #enumerate devuelve la posicion de la lista (index) junto con su contenido (voc)
         count = 0
         for item in docTokenizedTF:
             if word in docTokenizedTF[item]:
                 count += 1
-        #Guarda en "numOfWordsInDocuments" el universo de palabras junto con la cantidad de documentos que la contienen
+    #Guarda en "numOfWordsInDocuments" el universo de palabras junto con la cantidad de documentos que la contienen
         numOfWordsInDocuments[word] = count
     # ---- Calcular IDF ----
     dictOFIDFNoDuplicates = {}
@@ -84,7 +76,6 @@ def Tf_Idf(docTokenizedTF,UniverseWords):
             dictOFIDFNoDuplicates[item][word]=math.log(len(docTokenizedTF)/numOfWordsInDocuments[word])
         #Guarda en "dictOFIDFNoDuplicates" la misma lista de palabras que "docTokenizedTF" pero con su 
         #respectivo IDF
-
     #Multiplicar TF por IDF para obtener TF-IDF
     dictOFTF_IDF = {}
     for item in docTokenizedTF:

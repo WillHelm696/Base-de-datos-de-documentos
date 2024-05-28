@@ -1,12 +1,10 @@
-from Trie2 import *
+from trie import *
 from TF_IDF import *
 from limpieza import *
 from similitud_coseno import *
 from ranking import *
 from config import *
 import os
-import pickle
-import PyPDF2
 
 def new_bd(lista):
     #crea una lista de documentos limpios
@@ -16,7 +14,6 @@ def new_bd(lista):
             text = leer_pdf(item)
         elif item.endswith(".txt"):
             text = leer_txt(item)
-        
         text = clean_text(text)
         documents.append(text)
     file_names = [os.path.splitext(os.path.basename(item))[0] for item in lista] #guarda los nombres para usarlos de key
@@ -26,14 +23,14 @@ def new_bd(lista):
     for i, item in enumerate(file_names):
         tokens=documents[i]
         tokenized_docs[item]=re.split(r'\s+', tokens)
-    #tokeniza, calcula tf y devuelve universe words
+    #calcula tf y devuelve universe words
     tokens_trie=insert_tokens(tokenized_docs)
     tokenized_docs_tf=tokens_trie[0]
     uninverse_trie=tokens_trie[1]
+    #guarda los archivos 
     save_file(uninverse_trie, "universe_trie")
     save_file(tokenized_docs_tf, "tokenized_docs_tf")
     save_file(rutas_textos, "rutas_textos")
-    
     print('\n')
     print("document data-base created successfully")
     print('\n')
@@ -41,33 +38,27 @@ def new_bd(lista):
 
 def new_search(input):
     #Cargar archivos guardados en database
-    #print("holis")
     universe_trie=file_upload("universe_trie") 
     tokenized_docs_tf=file_upload("tokenized_docs_tf")
     rutas_textos=file_upload("rutas_textos")
     #procesar texto entrada 
     input=tokenizeWords(input)
     input_tokenized= input[0]
-    #print(input_tokenized)
     #agregar palabras input al universo
     for word in input_tokenized[0]:
         insert(universe_trie,word)
     #calcular tf de las palabras del input
-    #print(type(input[1][0]))
     tf_input=Tf(input_tokenized, input[1][0])
-    #Agrego el texto del profesor tokenizado a la lista de documentos
-    print(tokenized_docs_tf)
+    #Agrego el texto del profesor tokenizado a la lista de documentos y calculo tf-idf para todos los docs
     tokenized_docs_tf[len(tokenized_docs_tf)] = tf_input[0]
     universe_words=get_words(universe_trie.root)
-    #print(type(tokenized_docs_tf), tokenized_docs_tf)
     tf_idf_docs=Tf_Idf(tokenized_docs_tf,universe_words)
-
-    print("Ranking")
+    #ranking
     ranked_docs=ranking(tf_input[0],tf_idf_docs,rutas_textos)
-    #ranked_docs = ranked_docs[1:] #elimina el primer elemento (el mismo texto del profesor)
+    #hacer en funcion aparte o en ranking pero no en search ? 
     if len(ranked_docs)<10: #como es top 10 si hay menos de 10 documentos se muestra solo los que hay
         for i in range(0,len(ranked_docs)):
-            #agrega el texto al ranking
+            #agrega el texto al ranking desde la bd
             path=ranked_docs[i][2]
             if path.endswith(".pdf"):
                 text = leer_pdf(path)
@@ -82,7 +73,7 @@ def new_search(input):
             elif path.endswith(".txt"):
                 text = leer_txt(path)
             ranked_docs[i] = ranked_docs[i][:3] + (text,) + ranked_docs[i][4:]
-            
+    #imprimir resultados        
     for index in ranked_docs:
         print("---------------------------------------------------------------------------------------------")
         print('\n')
@@ -93,13 +84,9 @@ def new_search(input):
         print(f"Direccion: {index[2]}")
         print('\n')
         print(index[3])
-
-
     return
 
-
-
-#recibe un hash con tf-idf del profe, y un hash de hash con tf-idf de todos los documentos  
+#recibe un diccionario con tf-idf del profe, y un hash de hash con tf-idf de todos los documentos  
 def comparetexts_new(input_text,allDocuments):
     documents_compared={} #dict que guarda todos los documentos vectorizados en base al texto entrada
     for doc in allDocuments:

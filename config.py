@@ -6,11 +6,11 @@ import os
 import pickle
 import PyPDF2
 
-
 # Guarda en una lista las rutas de los archivos 
 def load_file(ruta):
     lista = os.listdir(ruta)
     archivos = []
+    #recorre cada archivo y carpeta en la ruta
     for item in lista :
         contenido = os.path.join(ruta,item)
         if os.path.isfile(contenido):
@@ -27,7 +27,6 @@ def save_file(data, file_name, save_path='database/'):
         os.makedirs(save_path)
     # Guardar el archivo en la carpeta database
     file_path = os.path.join(save_path, file_name + '.pkl')
-
     # Verificar si el archivo ya existe
     if os.path.exists(file_path):
         # Si el archivo existe, borrarlo
@@ -35,7 +34,6 @@ def save_file(data, file_name, save_path='database/'):
     # Guardar los nuevos datos como un archivo nuevo
     with open(file_path, 'wb') as f:
         pickle.dump(data, f)
-
 # Cargar el archivo desde la carpeta database
 def file_upload(file_name, load_path='database/'):
     file_path = os.path.join(load_path, file_name + '.pkl')
@@ -96,7 +94,7 @@ def search(textoProfe):
     UniverseWords=file_upload("UniverseWords") #words sin tf, limpias
     docTokenizedTF=file_upload("docTokenizedTF") #lista de docs tokenizados con tf, usar nombre como key 
     rutas_textos=file_upload("rutas_textos") #rutas de los textos
-    
+
     textoProfeTokenizado_Universo=tokenizeWords(textoProfe)
     textoProfeTokenizado = textoProfeTokenizado_Universo[0] #obtenemos el texto tokenizado en un diccionario
     todoTextoProfe = textoProfeTokenizado_Universo[1] #Texto vectorizado del profesor
@@ -143,4 +141,3 @@ def search(textoProfe):
         print(f"Direccion: {index[2]}")
         print('\n')
         print(index[3])
-    #print(ranked_docs)
