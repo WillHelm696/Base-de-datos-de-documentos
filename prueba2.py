@@ -21,7 +21,7 @@ def new_bd(lista):
     #tokeniza los documentos
     tokenized_docs = {}
     for i, item in enumerate(file_names):
-        tokens=documents[i]
+        tokens=documents[0][i]
         tokenized_docs[item]=re.split(r'\s+', tokens)
     #calcula tf y devuelve universe words
     tokens_trie=insert_tokens(tokenized_docs)
@@ -53,6 +53,8 @@ def new_search(input):
     tokenized_docs_tf[len(tokenized_docs_tf)] = tf_input[0]
     universe_words=get_words(universe_trie.root)
     tf_idf_docs=Tf_Idf(tokenized_docs_tf,universe_words)
+    #print("probando cositas owo")
+    #print(tf_idf_docs)
     #ranking
     ranked_docs=ranking(tf_input[0],tf_idf_docs,rutas_textos)
     #hacer en funcion aparte o en ranking pero no en search ? 
@@ -73,7 +75,8 @@ def new_search(input):
             elif path.endswith(".txt"):
                 text = leer_txt(path)
             ranked_docs[i] = ranked_docs[i][:3] + (text,) + ranked_docs[i][4:]
-    #imprimir resultados        
+    #imprimir resultados
+    
     for index in ranked_docs:
         print("---------------------------------------------------------------------------------------------")
         print('\n')
@@ -84,6 +87,8 @@ def new_search(input):
         print(f"Direccion: {index[2]}")
         print('\n')
         print(index[3])
+
+
     return
 
 #recibe un diccionario con tf-idf del profe, y un hash de hash con tf-idf de todos los documentos  

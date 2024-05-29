@@ -1,0 +1,35 @@
+  cleaned_text=re.split(r'\s+', cleaned_text)
+
+  lista_sufijos = ("bilidad" , "ble", "cion", "dad", "dor", "dora", "dura", "duria", "s", "es", "r", "er", "ndo", "res")
+  for i in range(len(cleaned_text)):
+    word = cleaned_text[i]
+    for term in lista_sufijos:
+      if word.endswith(term):
+        cleaned_text[i] = word[:-len(term)] 
+
+def tokenizeWords(documents):
+    dictOfWords = {} # Diccionario para almacenar la frecuencia de cada palabra en cada documento
+    allWordsOfText=[] #Lista que contrenda todo el documento vectorizado
+    UniverseWords = {} #Diccionario que contendra todas las palabras que existen en nuestro universo
+    if type(documents) is str:
+        tokenizeWords = clean_text(documents)
+        dictOfWords[0]={}
+        for word in tokenizeWords:
+            dictOfWords[0][word]=tokenizeWords.count(word)
+            UniverseWords[word]=""
+        allWordsOfText.append(tokenizeWords)
+        return (dictOfWords,allWordsOfText,UniverseWords)
+    else:
+        for index, sentence in enumerate(documents): #enumerate devuelve la posicion de la lista (index) junto con su contenido (sentense)
+            # Tokeniza las palabras en la oración
+            tokenizeWords = clean_text(sentence)
+            dictOfWords[index]={}
+            # Almacena las palabras y su frecuencia en el documento actual
+            for word in tokenizeWords:
+                dictOfWords[index][word]=tokenizeWords.count(word)
+                UniverseWords[word]=""
+            allWordsOfText.append(tokenizeWords)
+
+#Retorna un diccionario con todos los documentos Tokenizados, una lista con todos los textos vectorizados 
+#de cada documento y un diccionario de todas las palabras que existen en nuestro universo, ambos devueltos en una tupla
+    return (dictOfWords,allWordsOfText,UniverseWords)

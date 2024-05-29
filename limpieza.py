@@ -35,4 +35,15 @@ def clean_text(text):
 
   # Eliminar espacios extra generados por las eliminaciones
   cleaned_text = re.sub(r'\s+', ' ', cleaned_text).strip()
+
+
+#limpieza para "stemming"
+#depende del sufijo cambiar una letra? ej: alteracion --> altera --> alterar, por casos como "aldeano" --> "alde" --> aldea / "ciudadano --> "ciudad
+# "ero" cambiar por final de palabra o que hacer?  guerrilero --> guerrilla zapatero --> zapato? 
+#eza de tristeza por ej
+#ido / ida comido com por ej
+#"er " / r
+#es / s
+
+ 
   return cleaned_text
