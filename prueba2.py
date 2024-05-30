@@ -25,6 +25,8 @@ def new_bd(lista):
         tokenized_docs[item]=re.split(r'\s+', tokens)
     #calcula tf y devuelve universe words
     tokens_trie=insert_tokens(tokenized_docs)
+
+    ####FALTO HACER TF POR ESO NO FUNCIONA XD Hacer funcion de tf para trie o modificarla
     tokenized_docs_tf=tokens_trie[0]
     uninverse_trie=tokens_trie[1]
     #guarda los archivos 
@@ -76,7 +78,7 @@ def new_search(input):
                 text = leer_txt(path)
             ranked_docs[i] = ranked_docs[i][:3] + (text,) + ranked_docs[i][4:]
     #imprimir resultados
-    
+    """
     for index in ranked_docs:
         print("---------------------------------------------------------------------------------------------")
         print('\n')
@@ -87,7 +89,7 @@ def new_search(input):
         print(f"Direccion: {index[2]}")
         print('\n')
         print(index[3])
-
+"""
 
     return
 
@@ -119,4 +121,4 @@ def insert_tokens(tokens):
             insert(trie_words,word)
             insert(universe_trie,word) #inserto todas las palabras en trie universal
         dict_trie[key]=trie_words
-    return (dict_trie,universe_trie)
+    return (dict_trie,universe_trie) 

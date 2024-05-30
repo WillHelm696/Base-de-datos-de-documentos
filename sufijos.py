@@ -1,3 +1,4 @@
+
 def remove_suffixes(words):
   sufijos = [
     'aceo', 'acea', 'aco', 'aca', 'ada', 'ado', 'ada', 'aje', 'al', 'algia', 'amen', 
@@ -20,7 +21,7 @@ def remove_suffixes(words):
   ]
   
   for word in words:
-    for suffix in suffixes:
+    for suffix in sufijos:
       if word.endswith(suffix):
         word=re.sub(f'{suffix}$', '', word)
   return words
