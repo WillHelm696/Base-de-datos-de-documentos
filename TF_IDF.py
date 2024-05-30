@@ -42,9 +42,6 @@ def tokenizeWords(documents):
 #Retoruna un diccionario donde cada posicion es el documento "i" y dentro tiene un diccionario con todas sus palabras junto con su TF
 def Tf(dictOfWords,allWordsOfTexts):
     # ---- Calcular TF ----
-    print("tf")
-    print("diccionario palabras",dictOfWords[0])
-    #print(allWordsOfTexts)
     # Frecuencia de términos Normalizada
     docTokenizedTF = {} # Diccionario para almacenar la frecuencia normalizada de términos en cada documento
     for i in range(len(dictOfWords)):
@@ -63,19 +60,14 @@ def Tf_Idf(docTokenizedTF,UniverseWords):
     numOfWordsInDocuments = {}
     for item in docTokenizedTF:
         if type(docTokenizedTF[item]) != dict:
-            docTokenizedTF[item]=get_words(docTokenizedTF[item].root)
-    #que hace esto jaja ver si es lista o que y como se manda
-    #print("tf-idf", type(UniverseWords))
+            docTokenizedTF[item]=get_words(docTokenizedTF[item].root) #devuelve trie como diccionario
     for word in UniverseWords.keys(): 
-     #   print("word", word)
         count = 0
         for item in docTokenizedTF:
             if word in docTokenizedTF[item]:
-                #print("word", word, "docTokenizedTF[item]", docTokenizedTF[item][word])
                 count += 1
     #Guarda en "numOfWordsInDocuments" el universo de palabras junto con la cantidad de documentos que la contienen
         numOfWordsInDocuments[word] = count
-        #print("numOfWordsInDocuments", numOfWordsInDocuments)
     # ---- Calcular IDF ----
     dictOFIDFNoDuplicates = {}
     for item in docTokenizedTF:
