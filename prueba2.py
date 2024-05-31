@@ -66,7 +66,7 @@ def new_search(input):
                 text = leer_pdf(path)
             elif path.endswith(".txt"):
                 text = leer_txt(path)
-            ranked_docs[i] = ranked_docs[i][:3] + (text,) + ranked_docs[i][4:]
+            #ranked_docs[i] = ranked_docs[i][:3] + (text,) + ranked_docs[i][4:]
     else:
         for i in range(0,10): #si hay mas de 10 documentos se muestra solo los 10 primeros
             path=ranked_docs[i][2]
@@ -74,13 +74,13 @@ def new_search(input):
                 text = leer_pdf(path)
             elif path.endswith(".txt"):
                 text = leer_txt(path)
-            ranked_docs[i] = ranked_docs[i][:3] + (text,) + ranked_docs[i][4:]
-    # print(" ")
-    # print("ranking de documentos:")
-    # for i in range(0,len(ranked_docs)):
-    #     print(i+1," ", ranked_docs[i])
-    #     print(" ")
-    # print(" ")
+            #ranked_docs[i] = ranked_docs[i][:3] + (text,) + ranked_docs[i][4:]
+    print(" ")
+    print("ranking de documentos:")
+    for i in range(0,len(ranked_docs)):
+        print(i+1," ", ranked_docs[i])
+        print(" ")
+    print(" ")
     #imprimir resultados
     """
     for index in ranked_docs:
