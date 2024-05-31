@@ -21,7 +21,7 @@ def operaciones(args):
 
 def main():
     parser = argparse.ArgumentParser(description='Crear o buscar en la base de datos.')
-    parser.add_argument('operation', choices=['-create', '-search'], help='Operación a realizar: create | search')
+    parser.add_argument('operation', choices=['create', 'search'], help='Operación a realizar: create | search')
     parser.add_argument('argumento', help='Ruta a la carpeta de documentos o texto a buscar')
 
     args = parser.parse_args()
