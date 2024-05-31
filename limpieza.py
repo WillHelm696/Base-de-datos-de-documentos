@@ -68,6 +68,6 @@ def clean_text(text):
       if word.endswith(sufijo):
         cleaned_text[i] = word[:-len(sufijo)] #elimina el sufijo
 
-  print(cleaned_text)
+  #print(cleaned_text)
 
   return cleaned_text

@@ -11,7 +11,7 @@ def create_bd(ruta):
 
 def shearch_text(texto):   
     print("Busqueda")
-    new_bd(texto)
+    new_search(texto)
 
 def operaciones(args):
     if args.operation == 'create':

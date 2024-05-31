@@ -4,11 +4,11 @@ from limpieza import *
 from trie import *
 
 #Tokenizar texto en palabras
-def tokenizacion(texto):
-    # Dividir el texto en tokens utilizando expresiones regulares
-    tokens = clean_text(texto)    
-    tokens = re.split(r'\s+', tokens)
-    return tokens
+# def tokenizacion(texto):
+#     # Dividir el texto en tokens utilizando expresiones regulares
+#     tokens = clean_text(texto)    
+#     tokens = re.split(r'\s+', tokens)
+#     return tokens
 
 #Realiza la Tokenizacion sobre todos los documentos y consegue el universo de palabras
 def tokenizeWords(documents):
@@ -45,7 +45,6 @@ def Tf(dictOfWords,allWordsOfTexts):
     # Frecuencia de términos Normalizada
     docTokenizedTF = {} # Diccionario para almacenar la frecuencia normalizada de términos en cada documento
     for i in range(len(dictOfWords)):
-        print("sentence", allWordsOfTexts[i])
         sentence = allWordsOfTexts[i] #Guarda en "sentense" todas las palabras del documento "i"
         lenOfSentence = len(sentence) #Guarda la cantidad de palabras existentes en el documento "i" en la variable "lenOfSentence"
         docTokenizedTF[i]={}
@@ -55,12 +54,14 @@ def Tf(dictOfWords,allWordsOfTexts):
             docTokenizedTF[i][wordFreq]=normalizedFreq
     return docTokenizedTF
 
-def Tf_Idf(docTokenizedTF,UniverseWords):
+def Tf_Idf(docTokenized,UniverseWords):
     # Calcular el número de documentos donde aparece cada término
     numOfWordsInDocuments = {}
-    for item in docTokenizedTF:
-        if type(docTokenizedTF[item]) != dict:
-            docTokenizedTF[item]=get_words(docTokenizedTF[item].root) #devuelve trie como diccionario
+    docTokenizedTF={}
+    for item in docTokenized:
+        if type(docTokenized[item]) != dict:
+            docTokenizedTF[item]=get_words(docTokenized[item].root) #devuelve trie como diccionario
+            #diccionario_frecuencias_totales[item] = docTokenizedTF[item].root.palabras_totales
     for word in UniverseWords.keys(): 
         count = 0
         for item in docTokenizedTF:
@@ -82,6 +83,7 @@ def Tf_Idf(docTokenizedTF,UniverseWords):
     for item in docTokenizedTF:
         dictOFTF_IDF[item]={}
         for word in docTokenizedTF[item]:
-            dictOFTF_IDF[item][word]=docTokenizedTF[item][word]*dictOFIDFNoDuplicates[item][word]
+            #dictOFTF_IDF[item][word]=docTokenizedTF[item][word]*dictOFIDFNoDuplicates[item][word]
+            dictOFTF_IDF[item][word]=(docTokenizedTF[item][word]/docTokenized[item].root.palabras_totales)*dictOFIDFNoDuplicates[item][word]
     #Guarda en "dictOFTF_IDF" las palabras del documento "item / nombre" con sus respectivos TF-IDF y lo devuelve
     return dictOFTF_IDF 

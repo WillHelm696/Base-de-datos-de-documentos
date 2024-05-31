@@ -6,6 +6,7 @@ class TrieNode:
     children=None
     isEndOfWord=False
     tf=0
+    palabras_totales=0
 
 
 def insert(T, element):
@@ -14,6 +15,7 @@ def insert(T, element):
         newNode.key = None
         T.root = newNode
         T.root.parent = None
+    T.root.palabras_totales=T.root.palabras_totales+1
     insert_R(T.root, element)
 
 

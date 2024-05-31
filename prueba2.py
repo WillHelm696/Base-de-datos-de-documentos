@@ -21,19 +21,16 @@ def new_bd(lista):
     #tokeniza los documentos
     tokenized_docs = {}
     for i, item in enumerate(file_names):
-        tokens=documents[0][i]
-        tokenized_docs[item]=re.split(r'\s+', tokens)
+        tokenized_docs[item]=documents[i]
    
 #devuelve un diccionario con los tries de cada documento y un trie con todas las palabras de todos los documentos    
     tokens_trie=insert_tokens(tokenized_docs)
-
-    ####FALTO HACER TF POR ESO NO FUNCIONA XD Hacer funcion de tf para trie o modificarla
     #guardar info cant total palabras por doc (contar frecuencias)
-    tokenized_docs_tf=tokens_trie[0]
+    tokenized_docs=tokens_trie[0]
     universe_trie=tokens_trie[1]
     #guarda los archivos 
     save_file(universe_trie, "universe_trie")
-    save_file(tokenized_docs_tf, "tokenized_docs_tf")
+    save_file(tokenized_docs, "tokenized_docs")
     save_file(rutas_textos, "rutas_textos")
 
     print('\n')
@@ -44,7 +41,7 @@ def new_bd(lista):
 def new_search(input):
     #Cargar archivos guardados en database
     universe_trie=file_upload("universe_trie") 
-    tokenized_docs_tf=file_upload("tokenized_docs_tf")
+    tokenized_docs=file_upload("tokenized_docs")
     rutas_textos=file_upload("rutas_textos")
     #procesar texto entrada 
     input=tokenizeWords(input)
@@ -55,9 +52,9 @@ def new_search(input):
     #calcular tf de las palabras del input
     tf_input=Tf(input_tokenized, input[1][0])
     #Agrego el texto del profesor tokenizado a la lista de documentos y calculo tf-idf para todos los docs
-    tokenized_docs_tf[len(tokenized_docs_tf)] = tf_input[0]
+    tokenized_docs[len(tokenized_docs)] = tf_input[0]
     universe_words=get_words(universe_trie.root) #devuelve trie como diccionario
-    tf_idf_docs=Tf_Idf(tokenized_docs_tf,universe_words)
+    tf_idf_docs=Tf_Idf(tokenized_docs,universe_words)
     #ranking
     ranked_docs=ranking(tf_input[0],tf_idf_docs,rutas_textos)
     #hacer en funcion aparte o en ranking pero no en search ? 
@@ -78,6 +75,12 @@ def new_search(input):
             elif path.endswith(".txt"):
                 text = leer_txt(path)
             ranked_docs[i] = ranked_docs[i][:3] + (text,) + ranked_docs[i][4:]
+    # print(" ")
+    # print("ranking de documentos:")
+    # for i in range(0,len(ranked_docs)):
+    #     print(i+1," ", ranked_docs[i])
+    #     print(" ")
+    # print(" ")
     #imprimir resultados
     """
     for index in ranked_docs:
