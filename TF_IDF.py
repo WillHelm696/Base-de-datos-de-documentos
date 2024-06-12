@@ -3,13 +3,6 @@ import math
 from limpieza import *
 from trie import *
 
-#Tokenizar texto en palabras
-# def tokenizacion(texto):
-#     # Dividir el texto en tokens utilizando expresiones regulares
-#     tokens = clean_text(texto)    
-#     tokens = re.split(r'\s+', tokens)
-#     return tokens
-
 #Realiza la Tokenizacion sobre todos los documentos y consegue el universo de palabras
 def tokenizeWords(documents):
     dictOfWords = {} # Diccionario para almacenar la frecuencia de cada palabra en cada documento
@@ -33,7 +26,6 @@ def tokenizeWords(documents):
                 dictOfWords[index][word]=tokenizeWords.count(word)
                 UniverseWords[word]=""
             allWordsOfText.append(tokenizeWords)
-
 #Retorna un diccionario con todos los documentos Tokenizados, una lista con todos los textos vectorizados 
 #de cada documento y un diccionario de todas las palabras que existen en nuestro universo, ambos devueltos en una tupla
     return (dictOfWords,allWordsOfText,UniverseWords)

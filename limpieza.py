@@ -37,11 +37,16 @@ def clean_text(text):
   # Eliminar espacios extra generados por las eliminaciones
   cleaned_text = re.sub(r'\s+', ' ', cleaned_text).strip()
 
-#limpieza para "stemming"
+  #limpieza para "stemming"
   cleaned_text=re.split(r'\s+', cleaned_text)
 
    #ver cuales si y cuales no
-  sufijos_corto = [ "bilidad" , "ble", "cion", "dad", "dor", "dora", "dura", "duria", "s", "es", "r", "er", "ndo", "res", "mente"]
+  sufijos_corto = [ "bilidad" ,"ble","cion","dad","dor","dora","dura","duria","s","es","r","er","ndo","res","mente",
+                  "as", "ar", "ir", "ado", "ido", "iendo", 'ando', 'arian', 'erian', 'irian',
+                  'are', 'ere', 'ire', 'aria', 'eria', 'iria', 'aba', 'ía', 'aste', 'iste', 'o',
+                  'cion', 'sion', 'xion', 'tad', 'tud', 'aje', 'ista', 'oso', 'osa', 'al', 'ario', 
+                  'eza', 'ez', 'ible', 'able'   ]
+
   sufijos = [
     'aceo', 'acea', 'aco', 'aca', 'ada', 'ado', 'ada', 'aje', 'al', 'algia', 'amen', 
     'ancia', 'ano', 'ana', 'anza', 'ar', 'ario', 'aria', 'arquia', 'ata', 'ato', 'avo', 
@@ -59,15 +64,12 @@ def clean_text(text):
     'mento', 'metria', 'metro', 'miento', 'nomia', 'nomo', 'noma', 'nte', 'oide', 'oleo', 
     'oma', 'ope', 'opia', 'osis', 'oso', 'osa', 'on', 'ona', 'or', 'pata', 'patia', 
     'pedia', 'podo', 'polis', 'teca', 'torio', 'tud', 'udo', 'uda', 'ura', 'ucho', 
-    'ucha', 'voro', 'vora'
-  ]
-
+    'ucha', 'voro', 'vora']
+  
   for i in range(len(cleaned_text)):
     word = cleaned_text[i]
     for sufijo in sufijos:
       if word.endswith(sufijo):
         cleaned_text[i] = word[:-len(sufijo)] #elimina el sufijo
-
-  #print(cleaned_text)
 
   return cleaned_text

@@ -1,5 +1,4 @@
 from similitud_coseno import *
-"""Hacer acá print de resultados como funcion y llamarlo desde ranking"""
 
 #Recibe el texto ingresado por el profesor, la base de datos de los documentos con sus TF_IDF y las rutas de cada archivo
 def ranking(input_text,docs,rutas):
@@ -7,8 +6,13 @@ def ranking(input_text,docs,rutas):
     ranked_docs=[]
     for item in docs:
         if item in rutas:
-            r=(cosine_similarity(docs[item],docsInput_text[item]),item,rutas[item],"agregar_texto")
+            r=(cosine_similarity(docs[item],docsInput_text[item]),item,rutas[item])
         ranked_docs.append(r)
     ranked_docs = sorted(ranked_docs, key=lambda x: x[0], reverse=True) #ordena la lista de mayor a menor segun similitud
-    #devuelve lista de (similitud_coseno, nombre del archivo, ruta y espacio para guardar texto)
-    return ranked_docs
+    print(" ")
+    print("ranking de documentos:")
+    for i in range(0,10):
+        print(i+1," ", ranked_docs[i][1])
+        print(" ")
+    print(" ")
+    return 

@@ -1,16 +1,15 @@
 from config import *
-from prueba2 import *
 import argparse
 import sys
 
 def create_bd(ruta):
     # busca la dirrecon de los archivos
     archivos = load_file(ruta)
-    new_bd(archivos)
+    create_db(archivos)
 
 def search_text(texto):
     print("Busqueda")
-    new_search(texto)
+    search(texto)
 
 def operaciones(args):
     if args.create:
@@ -20,13 +19,11 @@ def operaciones(args):
 
 def main():
     parser = argparse.ArgumentParser(description='Crear o buscar en la base de datos.')
-    
     # Añade los argumentos para create y search
-    parser.add_argument('-create', help='Ruta a la carpeta de documentos')
+    parser.add_argument('-create', help='Ruta a la carpeta de documentos entre comillas')
     parser.add_argument('-search', help='Texto a buscar')
     
     args = parser.parse_args()
-    
     # Verifica qué operación se debe realizar
     operaciones(args)
 
