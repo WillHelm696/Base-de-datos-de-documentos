@@ -1,5 +1,5 @@
 import re
-from config import *
+#from config import *
 
 def leer_txt(item):
     with open(item,'r',encoding='utf-8') as archivo:
@@ -41,11 +41,11 @@ def clean_text(text):
   cleaned_text=re.split(r'\s+', cleaned_text)
 
    #ver cuales si y cuales no
-  sufijos_corto = [ "bilidad" ,"ble","cion","dad","dor","dora","dura","duria","s","es","r","er","ndo","res","mente",
-                  "as", "ar", "ir", "ado", "ido", "iendo", 'ando', 'arian', 'erian', 'irian',
+  sufijos_corto = [ 'bilidad','ble','cion','dad','dor','dora','dura','duria','s','es','r','er','ndo','res','mente',
+                  'as', 'ar', 'ir', 'ado', 'ido', 'iendo', 'ando', 'arian', 'erian', 'irian',
                   'are', 'ere', 'ire', 'aria', 'eria', 'iria', 'aba', 'ía', 'aste', 'iste', 'o',
                   'cion', 'sion', 'xion', 'tad', 'tud', 'aje', 'ista', 'oso', 'osa', 'al', 'ario', 
-                  'eza', 'ez', 'ible', 'able'   ]
+                  'eza', 'ez', 'ible', 'able', 'ciones'  ]
 
   sufijos = [
     'aceo', 'acea', 'aco', 'aca', 'ada', 'ado', 'ada', 'aje', 'al', 'algia', 'amen', 
@@ -68,8 +68,10 @@ def clean_text(text):
   
   for i in range(len(cleaned_text)):
     word = cleaned_text[i]
-    for sufijo in sufijos:
+    for sufijo in sufijos_corto:
       if word.endswith(sufijo):
-        cleaned_text[i] = word[:-len(sufijo)] #elimina el sufijo
-
+        if (len(word)-len(sufijo))>=4:
+          cleaned_text[i] = word[:-len(sufijo)] #elimina el sufijo
+        elif len(word)<=4 and len(sufijo)==1 and len(word)!=len(sufijo):
+           cleaned_text[i] = word[:-len(sufijo)]
   return cleaned_text
