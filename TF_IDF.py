@@ -40,6 +40,9 @@ def Tf(dictOfWords,allWordsOfTexts):
         sentence = allWordsOfTexts[i] #Guarda en "sentense" todas las palabras del documento "i"
         lenOfSentence = len(sentence) #Guarda la cantidad de palabras existentes en el documento "i" en la variable "lenOfSentence"
         docTokenizedTF[i]={}
+        if lenOfSentence == 0:
+            #print("documento vacio")
+            return docTokenizedTF
         for wordFreq in dictOfWords[i]:
             # Calcula la frecuencia normalizada dividiendo la frecuencia por el número total de palabras en la oración
             normalizedFreq = dictOfWords[i][wordFreq] / lenOfSentence 

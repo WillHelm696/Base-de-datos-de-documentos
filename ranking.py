@@ -10,7 +10,10 @@ def ranking(input_text,docs,rutas):
         ranked_docs.append(r)
     ranked_docs = sorted(ranked_docs, key=lambda x: x[0], reverse=True) #ordena la lista de mayor a menor segun similitud
     print(" ")
-    print("ranking de documentos:")
+    if ranked_docs[0][0]==0:
+        print("document not found")
+        return
+    print("Ranking de documentos:")
     for i in range(0,10):
         print(i+1," ", ranked_docs[i][1])
         print(" ")
