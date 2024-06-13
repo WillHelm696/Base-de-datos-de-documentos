@@ -41,37 +41,19 @@ def clean_text(text):
   cleaned_text=re.split(r'\s+', cleaned_text)
 
    #ver cuales si y cuales no
-  sufijos_corto = [ 'bilidad','ble','cion','dad','dor','dora','dura','duria','s','es','r','er','ndo','res','mente',
-                  'as', 'ar', 'ir', 'ado', 'ido', 'iendo', 'ando', 'arian', 'erian', 'irian',
-                  'are', 'ere', 'ire', 'aria', 'eria', 'iria', 'aba', 'ía', 'aste', 'iste', 'o',
-                  'cion', 'sion', 'xion', 'tad', 'tud', 'aje', 'ista', 'oso', 'osa', 'al', 'ario', 
-                  'eza', 'ez', 'ible', 'able', 'ciones'  ]
-
-  sufijos = [
-    'aceo', 'acea', 'aco', 'aca', 'ada', 'ado', 'ada', 'aje', 'al', 'algia', 'amen', 
-    'ancia', 'ano', 'ana', 'anza', 'ar', 'ario', 'aria', 'arquia', 'ata', 'ato', 'avo', 
-    'ava', 'azgo', 'azo', 'bilidad', 'ble', 'cardio', 'cardia', 'cida', 'cidio', 'cion', 
-    'cola', 'cracia', 'crata', 'cultor', 'cultora', 'dad', 'demia', 'dero', 'dera', 'dizo', 
-    'diza', 'dor', 'dora', 'dura', 'ear', 'ecer', 'eco', 'edo', 'eda', 'edro', 'ego', 'ega', 
-    'encia', 'eno', 'ena', 'ense', 'eno', 'ena', 'era', 'eria', 'ero', 'era', 'es', 'esa', 
-    'esco', 'esca', 'ez', 'eza', 'fagia', 'fago', 'faga', 'fero', 'fera', 'filia', 'filo', 
-    'fila', 'fito', 'fobia', 'fobo', 'foba', 'fono', 'fona', 'fonia', 'forme', 'fugo', 
-    'fuga', 'gamia', 'gamo', 'gama', 'genia', 'geno', 'gena', 'geo', 'ginia', 'gino', 
-    'gina', 'gono', 'grafia', 'grafo', 'grafa', 'grama', 's', 'ia', 'iano', 'iana', 'ica', 
-    'ido', 'ida', 'ificar', 'il', 'in', 'ina', 'ina', 'ing', 'ismo', 'ista', 'istico', 
-    'istica', 'itis', 'izar', 'izo', 'iza', 'ita', 'latra', 'latria', 'lisis', 'lito', 
-    'logia', 'logo', 'loga', 'illos', 'mancia', 'mania', 'mano', 'mana', 'mante', 'mente', 
-    'mento', 'metria', 'metro', 'miento', 'nomia', 'nomo', 'noma', 'nte', 'oide', 'oleo', 
-    'oma', 'ope', 'opia', 'osis', 'oso', 'osa', 'on', 'ona', 'or', 'pata', 'patia', 
-    'pedia', 'podo', 'polis', 'teca', 'torio', 'tud', 'udo', 'uda', 'ura', 'ucho', 
-    'ucha', 'voro', 'vora']
+  sufijos_corto = [ 'o','r','er','es','as','s','ar', 'ir','bilidad','dad','dor','dora','dura','duria','ndo','res','mente',
+                   'ado', 'ido', 'iendo', 'ando', 'arian', 'erian', 'irian',
+                  'are', 'ere', 'ire', 'aria', 'eria', 'iria', 'aba', 'ia', 'aste', 'iste', 
+                  'sion', 'xion', 'tad', 'tud', 'aje', 'ista', 'oso', 'osa', 'al', 'ario', 
+                  'eza', 'ez', 'ible', 'able','ble','cion' ]
   
   for i in range(len(cleaned_text)):
     word = cleaned_text[i]
     for sufijo in sufijos_corto:
       if word.endswith(sufijo):
         if (len(word)-len(sufijo))>=4:
-          cleaned_text[i] = word[:-len(sufijo)] #elimina el sufijo
+          word = word[:-len(sufijo)] #elimina el sufijo
         elif len(word)<=4 and len(sufijo)==1 and len(word)!=len(sufijo):
-           cleaned_text[i] = word[:-len(sufijo)]
+           word = word[:-len(sufijo)]
+    cleaned_text[i]=word
   return cleaned_text
