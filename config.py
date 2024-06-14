@@ -6,19 +6,47 @@ from ranking import *
 import os
 import pickle
 import PyPDF2
+import time
+def print_progress_bar(iteration, total, prefix='', suffix='', decimals=1, length=50, fill='█'):
+    """
+    Llama en un bucle para crear una barra de progreso terminal
+    @params:
+        iteration   - Requerido  : iteración actual (Int)
+        total       - Requerido  : total de iteraciones (Int)
+        prefix      - Opcional   : prefijo de la cadena (Str)
+        suffix      - Opcional   : sufijo de la cadena (Str)
+        decimals    - Opcional   : número de decimales en porcentaje (Int)
+        length      - Opcional   : longitud de la barra (Int)
+        fill        - Opcional   : barra de llenado del carácter (Str)
+    """
+    percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
+    filled_length = int(length * iteration // total)
+    bar = fill * filled_length + '-' * (length - filled_length)
+    print(f'\r{prefix} |{bar}| {percent}% {suffix}', end='\r')
+    # Imprimir nueva línea cuando se completa
+    if iteration == total: 
+        print()
 
 # Guarda en una lista las rutas de los archivos 
 def load_file(ruta):
     lista = os.listdir(ruta)
     archivos = []
     #recorre cada archivo y carpeta en la ruta
-    for item in lista :
+
+    total_files = len(lista)
+
+    for i, item in enumerate(lista) :
         contenido = os.path.join(ruta,item)
         if os.path.isfile(contenido):
             archivos.append(contenido)
         elif os.path.isdir(contenido):
             #Si hay una carpeta agrega los archivos de la carpeta a la lista
             archivos += load_file(contenido)
+        """
+        # Actualiza la barra de progreso
+        print_progress_bar(i + 1, total_files, prefix='Cargando archivos:', suffix='Completado', length=50)
+        time.sleep(0.1) # Simula el tiempo de procesamiento
+        """
     return archivos
 
 #Funcion que guarda archivo en un pickle en la carpeta database
@@ -59,13 +87,21 @@ def leer_pdf(ruta):
 def create_db(lista):
     #crea una lista de documentos limpios
     documents = []
-    for item in lista:
+    
+    total_files = len(lista)
+    print()
+    for i, item in enumerate(lista):
         if item.endswith(".pdf"):
             text = leer_pdf(item)
         elif item.endswith(".txt"):
             text = leer_txt(item)
         text = clean_text(text)
         documents.append(text)
+        """
+        # Actualiza la barra de progreso
+        print_progress_bar(i + 1, total_files, prefix='Generando Base De Datos:', suffix='Completado', length=50)
+        time.sleep(0.1) # Simula el tiempo de procesamiento
+        """
     file_names = [os.path.splitext(os.path.basename(item))[0] for item in lista] #guarda los nombres para usarlos de key
     rutas_textos = {item: contenido for item, contenido in zip(file_names, lista)} #guarda las rutas
     #tokeniza los documentos
@@ -89,6 +125,17 @@ def create_db(lista):
     return
     
 def search(input):
+
+    # Verificar si los archivos necesarios existen en la base de datos
+    required_files = ["universe_trie", "tokenized_docs", "rutas_textos"]
+    missing_files = [file for file in required_files if not os.path.exists(f"database/{file}.pkl")]
+
+    if missing_files:
+        print('\n')
+        print("Por favor, cargue los archivos en la base de datos primero.")
+        print('\n')
+        return
+
      #Cargar archivos guardados en database
     universe_trie=file_upload("universe_trie") 
     tokenized_docs=file_upload("tokenized_docs")
